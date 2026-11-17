@@ -1,0 +1,74 @@
+{
+  "name": "hugin-network",
+  "version": "3.0.0",
+  "description": "Shared P2P layer of hugin-desktop and hugin-native: Hugin swarms, keys, wire format, validation and text sanitising, hugin-node client with proof of work on hugin-pow, push payloads, file storage and sync on corestore/hyperdrive, DM crypto (Node and Bare; hugin-network/dm also React Native)",
+  "license": "MIT",
+  "author": "The Kryptokrona Developers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kryptokrona/hugin-network.git"
+  },
+  "keywords": [
+    "hugin",
+    "kryptokrona",
+    "p2p",
+    "hyperswarm",
+    "bare"
+  ],
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./keys": "./lib/keys.js",
+    "./sanitize": "./lib/sanitize.js",
+    "./wire": "./lib/wire.js",
+    "./pow": "./lib/pow.js",
+    "./push": "./lib/push.js",
+    "./swarm": "./lib/swarm.js",
+    "./node": "./lib/node-client.js",
+    "./files": "./lib/files.js",
+    "./events": "./lib/events.js",
+    "./rooms": "./lib/rooms.js",
+    "./feed": "./lib/feed.js",
+    "./voice": "./lib/voice.js",
+    "./dm": "./lib/dm.js",
+    "./package.json": "./package.json"
+  },
+  "imports": {
+    "#fs": {
+      "bare": "bare-fs",
+      "default": "./lib/node-fs.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "lib/*.js"
+  ],
+  "scripts": {
+    "test": "brittle test/*.test.js",
+    "test:bare": "bare test/all.js",
+    "prepublishOnly": "node scripts/release-deps.js check"
+  },
+  "dependencies": {
+    "b4a": "1.9.0",
+    "bare-events": "2.9.2",
+    "bare-fs": "4.5.3",
+    "compact-encoding": "3.7.0",
+    "corestore": "7.7.0",
+    "hugin-pow": "file:../hugin-pow",
+    "hyperdht": "6.36.0",
+    "hyperdrive": "13.2.1",
+    "hyperswarm": "4.17.2",
+    "js-sha3": "0.9.3",
+    "protomux": "3.13.1",
+    "sodium-universal": "5.0.1"
+  },
+  "releaseDependencies": {
+    "hugin-pow": "^1.0.0"
+  },
+  "devDependencies": {
+    "@hyperswarm/secret-stream": "6.9.2",
+    "brittle": "3.19.0",
+    "sanitize-html": "2.17.5",
+    "test-tmp": "1.4.0"
+  }
+}

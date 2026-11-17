@@ -1,0 +1,20 @@
+'use strict'
+
+// Runs every test file in one process (for `bare test/all.js`; brittle registers them all).
+require('./swarm.test.js')
+require('./keys.test.js')
+require('./sanitize.test.js')
+require('./html.test.js')
+require('./wire.test.js')
+require('./pow.test.js')
+require('./push.test.js')
+require('./node-client.test.js')
+require('./files.test.js')
+require('./rooms.test.js')
+require('./feed.test.js')
+require('./facade.test.js')
+require('./integration.test.js')
+require('./rooms-limits.test.js')
+require('./signing-payloads.test.js')
+require('./dm.test.js')
+require('./shared-dht.test.js')

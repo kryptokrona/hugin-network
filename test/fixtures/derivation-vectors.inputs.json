@@ -1,0 +1,36 @@
+{
+  "description": "Inputs of the swarm derivation vectors of hugin-network 3.0 (domain-separated topic and mid; lib/swarm.js and the xkr Rust node). Outputs are not stored here: test/swarm.test.js computes them twice (lib, and an independent keccak256 + sodium implementation), compares both and prints them as a 'derivation-vectors' JSON comment for export. Derivation per entry: key bytes K (see key_rule); topicKey = fill32(K) (K repeated/truncated to 32 bytes, like Buffer.alloc(32).fill(K)); base = crypto_sign_seed_keypair(topicKey); topic = keccak256(UTF-8(topic_domain) || base.publicKey) with original Keccak padding (cn_fast_hash), 11 + 32 = 43 input bytes; mid = ed25519 detached signature by base.secretKey over UTF-8(mid_domain) || dht.publicKey, 9 + 32 = 41 bytes; dht = crypto_sign_seed_keypair(dht_seed). The Noise payload format (flag 128, 64-byte mid last) and the protomux channel 'hugin-messages' are unchanged.",
+  "topic_domain": "hugin/topic",
+  "mid_domain": "hugin/mid",
+  "dht_seed": "0707070707070707070707070707070707070707070707070707070707070707",
+  "dht_public_key": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+  "dht_public_key_source": "hugin-relay.json auth[].pub (key pair of seed 32 x 0x07)",
+  "keys": [
+    {
+      "name": "room",
+      "key_rule": "K = sha512(hexbytes(invite)), 64 bytes; fill32 keeps the first 32",
+      "invite": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    },
+    {
+      "name": "dm",
+      "key_rule": "K = sha512(hexbytes(derivation_hash)), 64 bytes; fill32 keeps the first 32",
+      "derivation_hash": "1f2e3d4c5b6a79881f2e3d4c5b6a79881f2e3d4c5b6a79881f2e3d4c5b6a7988"
+    },
+    {
+      "name": "node mesh",
+      "key_rule": "K = UTF-8(key) where key = hex(cn_fast_hash(UTF-8(network_address)))",
+      "network_address": "xkr96c0f8a36e951b399681d447922f6c54c28c6ef3cad1c65d3568008151337",
+      "key": "c9b4d847ffa97a1d49c74d8085b9529c191080704e325cef9229717a8f769614"
+    },
+    {
+      "name": "public nodes",
+      "key_rule": "K = UTF-8(key) where key = NETWORK_ADDRESS",
+      "key": "xkr96c0f8a36e951b399681d447922f6c54c28c6ef3cad1c65d3568008151337"
+    },
+    {
+      "name": "private node",
+      "key_rule": "K = UTF-8(key) where key = the node's XKR address",
+      "key": "SEKReYU57DLLvUjNzmjVhaK7jqc8SdZZ3cyKJS5f4gWXK4NQQYChzKUUwzCGhgqUPkWQypeR94rqpgMPjXWG9ijnZKNw2LWXnZU"
+    }
+  ]
+}
