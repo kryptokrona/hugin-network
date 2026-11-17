@@ -3,7 +3,7 @@
 const test = require('brittle')
 const b4a = require('b4a')
 const { keccak256 } = require('js-sha3')
-const { getNewPeerKeys, keyPairFromSeed } = require('../lib/swarm.js')
+const { getNewPeerKeys, keyPairFromSeed, huginTopicFromKey } = require('../lib/swarm.js')
 const keys = require('../lib/keys.js')
 const { NETWORK_ADDRESS } = require('../lib/constants.js')
 const desktop = require('./fixtures/legacy-desktop.js')
@@ -96,6 +96,23 @@ test('node topics: same topic string as hugin-node, DHT topic no longer the earl
   }
   t.is(keys.nodeSwarmKey({ pub: true }), NETWORK_ADDRESS)
   t.exception.all(() => keys.nodeSwarmKey({}))
+})
+
+test('nodeSwarmKey: an xkrd private node invite gives its topic key (same topic as xkrd)', (t) => {
+  // xkrd --private, secret 0x11 * 32: topic key cn_fast_hash("xkr/private/hugin/v1" || secret)
+  const topicKey = '1757f41fcc392193a50601446066a6b19ddff9ab2422ea8558289ae425070483'
+  const nodeKey = hex(dhtKeyPair.publicKey)
+  const invite = ADDRESS + topicKey + nodeKey
+  t.is(invite.length, 227)
+  const key = keys.nodeSwarmKey({ address: invite })
+  t.is(hex(key), topicKey)
+  t.is(hex(huginTopicFromKey(key).topic),
+    'f1e836184d1e8d39ded91d16044881d9560dbd9ab09b1dba8f8cc6f8e537ea8c', 'the DHT topic xkrd announces')
+  t.ok(keys.isAllowedNodePeer(dhtKeyPair.publicKey, { address: invite }))
+  t.absent(keys.isAllowedNodePeer(otherDhtKeyPair.publicKey, { address: invite }))
+  const notHex = ADDRESS + 'z'.repeat(64) + nodeKey
+  t.is(keys.nodeSwarmKey({ address: notHex }), notHex, 'not hex: the invite as it is')
+  t.is(keys.nodeSwarmKey({ address: ADDRESS + nodeKey }), ADDRESS + nodeKey, '163 characters as before')
 })
 
 test('node firewall: public topic allows anyone, private node only the invite key', (t) => {
