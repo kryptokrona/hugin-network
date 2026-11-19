@@ -116,6 +116,24 @@ The DM host hooks are `identity`, `sign`, `verify` (optional), `keyDerivation`,
 `loadContactCrypto` / `saveContactCrypto`, `loadKemIdentity` / `saveKemIdentity`, `now` and
 `log` (see the JSDoc in `lib/dm.js`).
 
+### `hugin-network/xkr-daemon`
+
+A wallet's daemon over Hyperswarm: an xkrd node found on the wallets topic
+(`xkr/<network>/wallets/v1`), or the private node of an invite (`xkr:…`). It is a
+`DaemonRequester` for wallet-backend-js (`Daemon.withRequester`), so the wallet syncs and sends
+through it as through an HTTP node:
+
+```js
+const { XkrDaemonRequester } = require('hugin-network/xkr-daemon')
+const requester = new XkrDaemonRequester({ network: 'mainnet' })   // or { invite: 'xkr:…' }
+const daemon = WB.Daemon.withRequester(requester)
+```
+
+A node is used when it is synchronized and its state hash matches the list xkrd ships
+(`lib/xkr-state-hashes.json`). Runs under Node, Electron and Bare; in React Native the
+requester on the RN side forwards `request(method, path, body)` to the Bare worklet. Wire format:
+xkrd `docs/hyper-transport.md`, "Clients topic" and "Wallets topic".
+
 ### Other modules
 
 - `hugin-network/swarm`: `createHuginSwarm`, `SharedMidDHT` and the topic and `mid` helpers.

@@ -31,6 +31,7 @@
     "./feed": "./lib/feed.js",
     "./voice": "./lib/voice.js",
     "./dm": "./lib/dm.js",
+    "./xkr-daemon": "./lib/xkr-daemon.js",
     "./package.json": "./package.json"
   },
   "imports": {
